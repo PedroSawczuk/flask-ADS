@@ -63,7 +63,7 @@
     </div>
     <div class="form-group">
         <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" name="telefone" class="form-control" value="{{ telefone or '' }}" required />
+        <input type="text" id="telefone" name="telefone" class="form-control" value="{{ telefone or '' }}" required maxlength="15" />
     </div>
     <div class="form-group">
         <label for="email">Email:</label>
@@ -80,9 +80,22 @@
                     .substring(0, 9); // Limita o comprimento a 9 caracteres
     }
 
+    // Função para formatar o telefone com () e -
+    function formatTelefone(value) {
+        return value.replace(/\D/g, '') // Remove todos os caracteres não numéricos
+                    .replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3') // Adiciona parênteses e hífen
+                    .substring(0, 15); // Limita o comprimento a 15 caracteres
+    }
+
     const cepInput = document.getElementById('cep');
+    const telefoneInput = document.getElementById('telefone');
+
     cepInput.addEventListener('input', function() {
         this.value = formatCEP(this.value);
+    });
+
+    telefoneInput.addEventListener('input', function() {
+        this.value = formatTelefone(this.value);
     });
 
     // Função para preencher os campos de endereço com base no CEP
