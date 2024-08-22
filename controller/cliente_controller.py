@@ -8,13 +8,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 cliente_blueprint = Blueprint('cliente', __name__)
 
-@cliente_blueprint.route('/')
+@cliente_blueprint.route('/', methods=['GET', 'POST'])
 def index():
-    clientes = Clientes.get_clientes()
-    return render_template('clientes/list_clientes.html', clientes=clientes)
-
-@cliente_blueprint.route('/novo', methods=['GET', 'POST'])
-def novo_cliente():
     if request.method == 'POST':
         nome = request.form.get('nome')
         cpf = request.form.get('cpf')
@@ -59,13 +54,12 @@ def novo_cliente():
             )
             cliente.salvar()
             flash('Cliente cadastrado com sucesso!', 'success')
-            return redirect(url_for('cliente.index'))
 
         except ValueError as e:
             flash(f'Erro: {e}', 'error')
-            return render_template('clientes/novo_cliente.html', **dados_validos)
 
-    return render_template('clientes/novo_cliente.html')
+    clientes = Clientes.get_clientes()
+    return render_template('clientes/index_cliente.html', clientes=clientes, **request.form)
 
 @cliente_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_cliente(id):
@@ -151,6 +145,6 @@ def reindexar_clientes():
         
 def init_app(app):
     app.add_url_rule('/', 'index', index)
-    app.add_url_rule('/cliente/novo', 'novo_cliente', novo_cliente, methods=['GET', 'POST'])
+    app.add_url_rule('/cliente/novo', 'index', index, methods=['GET', 'POST'])
     app.add_url_rule('/editar/<int:id>', 'editar_cliente', editar_cliente, methods=['GET', 'POST'])
-    app.add_url_rule('/cliente/deleta/<int:id>', 'deleta_cliente', deleta_cliente, methods=['GET'])
+    app.add_url_rule('/cliente/deleta/<int:id>', 'deleta_cliente', deleta_cliente, methods=['POST'])

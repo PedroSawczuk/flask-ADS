@@ -3,13 +3,8 @@ from models.produto_model import Produto
 
 produto_blueprint = Blueprint('produto', __name__)
 
-@produto_blueprint.route("/")
+@produto_blueprint.route("/", methods=['GET', 'POST'])
 def index():
-    produtos = Produto.get_produtos()
-    return render_template('produtos/list_produtos.html', produtos=produtos)
-
-@produto_blueprint.route("/novo", methods=['GET', 'POST'])
-def novo():
     if request.method == 'POST':
         descricao = request.form.get('descricao')
         preco = request.form.get('preco')
@@ -21,8 +16,10 @@ def novo():
         produto.salvar()
 
         flash(f'Produto "{descricao}" adicionado com sucesso!', 'success')
-        return redirect(url_for('produto.index'))    
-    return render_template('produtos/novo_produto.html')
+        return redirect(url_for('produto.index'))
+
+    produtos = Produto.get_produtos()
+    return render_template('produtos/index_produto.html', produtos=produtos)
 
 @produto_blueprint.route("/atualiza/<int:id>/<int:status>", methods=['GET'])
 def atualiza(id, status):
@@ -53,8 +50,7 @@ def editar(id):
     return render_template('produtos/editar_produto.html', produto=produto)
 
 def init_app(app):
-    # Associando as funções de exibição às respectivas rotas utilizando a função add_url_rule do objeto app do Flask.
-    app.add_url_rule('/', 'index', index)
-    app.add_url_rule('/produto/novo', 'novo', novo, methods=['GET', 'POST'])
+    app.add_url_rule('/', 'index', index, methods=['GET', 'POST'])
     app.add_url_rule('/produto/atualiza/<int:id>/<int:status>', 'atualiza', atualiza, methods=['GET'])
     app.add_url_rule('/produto/deleta/<int:id>', 'deleta', deleta, methods=['GET'])
+    app.add_url_rule('/produto/editar/<int:id>', 'editar', editar, methods=['GET', 'POST'])
