@@ -2,6 +2,19 @@
 
 {% block head %}
 <title>Produtos Cadastrados</title>
+<style>
+    .floating-message {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1050;
+        min-width: 300px;
+        max-width: 400px;
+        opacity: 0.9;
+        text-align: center;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
@@ -10,6 +23,26 @@
 <a href="{{ url_for('produto.novo') }}">Adicionar Novo Produto</a>
 
 <h3>Produtos Cadastrados</h3>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="alert alert-{{ messages[0][0] }} floating-message alert-dismissible fade show" role="alert" id="flash-message">
+    {{ messages[0][1] }}
+</div>
+<script>
+    setTimeout(function() {
+        var flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            flashMessage.classList.remove('show');
+            flashMessage.classList.add('fade');
+            setTimeout(function() {
+                flashMessage.remove();
+            }, 500);
+        }
+    }, 5000);
+</script>
+{% endif %}
+{% endwith %}
 
 <table class="table table-striped">
   <thead>
@@ -29,23 +62,21 @@
       <td>{{ produto.preco }}</td>
       <td>{{ 'Ativo' if produto.status == 1 else 'Desativado' }}</td>
       <td>
-        <a
-          href="{{ url_for('produto.atualiza', id=produto.id, status=1 if produto.status == 0 else 0) }}"
-          class="btn btn-warning btn-sm"
-        >
+        <a href="{{ url_for('produto.atualiza', id=produto.id, status=1 if produto.status == 0 else 0) }}" class="btn btn-warning btn-sm">
           {{ 'Ativar' if produto.status == 0 else 'Desativar' }}
         </a>
-        <a
-          href="{{ url_for('produto.editar', id=produto.id) }}"
-          class="btn btn-primary btn-sm"
-        >Editar</a>
-        <a
-          href="{{ url_for('produto.deleta', id=produto.id) }}"
-          class="btn btn-danger btn-sm"
-        >Deletar</a>
+        <a href="{{ url_for('produto.editar', id=produto.id) }}" class="btn btn-primary btn-sm">Editar</a>
+        <a href="{{ url_for('produto.deleta', id=produto.id) }}" class="btn btn-danger btn-sm" onclick="return confirmarExclusao('{{ produto.descricao }}');">Deletar</a>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<script>
+    function confirmarExclusao(descricao) {
+        return confirm('Você tem certeza que deseja excluir o produto "' + descricao + '"?');
+    }
+</script>
+
 {% endblock %}

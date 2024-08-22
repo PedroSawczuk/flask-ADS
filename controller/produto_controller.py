@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, flash, render_template, request, redirect, url_for
 from models.produto_model import Produto
 
 produto_blueprint = Blueprint('produto', __name__)
@@ -19,7 +19,9 @@ def novo():
 
         produto = Produto(descricao=descricao, preco=float(preco))
         produto.salvar()
-        return redirect(url_for('produto.index'))
+
+        flash(f'Produto "{descricao}" adicionado com sucesso!', 'success')
+        return redirect(url_for('produto.index'))    
     return render_template('produtos/novo_produto.html')
 
 @produto_blueprint.route("/atualiza/<int:id>/<int:status>", methods=['GET'])

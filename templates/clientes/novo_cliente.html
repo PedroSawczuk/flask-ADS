@@ -8,22 +8,6 @@
 <h1>Cadastrar Novo Cliente</h1>
 <a href="{{ url_for('cliente.index') }}">Voltar</a>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-        <script>
-            $(".alert").delay(5000).slideUp(200, function() {
-                $(this).alert('close');
-            });
-        </script>
-    {% endif %}
-{% endwith %}
-
 <form method="POST" class="mb-4">
     <div class="form-group">
         <label for="nome">Nome:</label>

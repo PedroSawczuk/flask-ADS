@@ -8,20 +8,6 @@
 <h3>Adicionar Novo Produto</h3>
 <a href="{{ url_for('produto.index') }}">Voltar</a>
 
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-    {{ messages[0] }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-<script>
-    $(".alert").delay(5000).slideUp(200, function () {
-        $(this).alert('close');
-    });
-</script>
-{% endif %}
-{% endwith %}
-
 <form action="{{ url_for('produto.novo') }}" method="POST" autocomplete='off'>
     <div class='mb-3'>
         <label for='descricao' class='form-label'>Descrição</label>
