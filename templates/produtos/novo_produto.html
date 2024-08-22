@@ -8,7 +8,6 @@
 <h3>Adicionar Novo Produto</h3>
 <a href="{{ url_for('produto.index') }}">Voltar</a>
 
-
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -40,4 +39,18 @@
         <button type='submit' class='btn btn-primary mb-3'>Cadastrar</button>
     </div>
 </form>
+
+<script>
+    // Função para formatar o preço com ponto
+    function formatPreco(value) {
+        return value.replace(',', '.');
+    }
+
+    const precoInput = document.getElementById('preco');
+
+    precoInput.addEventListener('input', function() {
+        this.value = formatPreco(this.value);
+    });
+</script>
+
 {% endblock %}

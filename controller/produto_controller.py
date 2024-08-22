@@ -1,8 +1,3 @@
-"""
-Claudinei de Oliveira - pt-BR - 19-06-2023
-Manipulando o banco de dados sqlite3 
-Adaptado de Giridhar, 2016
-""" 
 from flask import Blueprint, render_template, request, redirect, url_for
 from models.produto_model import Produto
 
@@ -18,7 +13,11 @@ def novo():
     if request.method == 'POST':
         descricao = request.form.get('descricao')
         preco = request.form.get('preco')
-        produto = Produto(descricao=descricao, preco=preco)
+
+        # Converte vírgula para ponto no preço
+        preco = preco.replace(',', '.')
+
+        produto = Produto(descricao=descricao, preco=float(preco))
         produto.salvar()
         return redirect(url_for('produto.index'))
     return render_template('produtos/novo_produto.html')
@@ -41,7 +40,12 @@ def editar(id):
     produto = Produto.get_produto(id)
     if request.method == 'POST':
         produto.descricao = request.form.get('descricao')
-        produto.preco = request.form.get('preco')
+        preco = request.form.get('preco')
+
+        # Converte vírgula para ponto no preço
+        preco = preco.replace(',', '.')
+
+        produto.preco = float(preco)
         produto.atualizar()
         return redirect(url_for('produto.index'))
     return render_template('produtos/editar_produto.html', produto=produto)
