@@ -131,7 +131,7 @@ def editar_cliente(id):
     # Preenche o formulário com os dados atuais do cliente
     return render_template('clientes/editar_cliente.html', cliente=cliente)
 
-@cliente_blueprint.route("/deleta/<int:id>", methods=['GET'])
+@cliente_blueprint.route("/deleta/<int:id>", methods=['POST'])
 def deleta_cliente(id):
     cliente = Clientes.get_cliente(id)
     if not cliente:
@@ -142,6 +142,13 @@ def deleta_cliente(id):
     flash('Cliente deletado com sucesso!', 'success')
     return redirect(url_for('cliente.index'))
 
+def reindexar_clientes():
+    # Reindexar IDs de clientes para garantir que sejam consecutivos
+    clientes = Clientes.get_clientes()
+    for index, cliente in enumerate(clientes, start=1):
+        cliente.id = index
+        cliente.atualizar()
+        
 def init_app(app):
     app.add_url_rule('/', 'index', index)
     app.add_url_rule('/cliente/novo', 'novo_cliente', novo_cliente, methods=['GET', 'POST'])

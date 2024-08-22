@@ -141,7 +141,8 @@ class Clientes(Pessoas, db.Model):
         db.session.commit() 
 
     def atualizar(self):
-        db.session.commit()  
+        db.session.merge(self)
+        db.session.commit()
 
     def deletar(self):
         db.session.delete(self)  
@@ -149,8 +150,9 @@ class Clientes(Pessoas, db.Model):
 
     @staticmethod
     def get_clientes():
-        return db.session.query(Clientes).all()
+        return db.session.query(Clientes).order_by(Clientes.id).all()
 
     @staticmethod
     def get_cliente(id):
         return db.session.query(Clientes).get(id)
+
