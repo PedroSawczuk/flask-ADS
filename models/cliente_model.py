@@ -1,13 +1,21 @@
-"""
-José Estevão Machado Zanetti - pt-br - 15/08/2024
-Cliente Models
-"""
-
 import regex
+import requests
 from sqlalchemy import *
 from database import db
 
 class Validador:
+
+    @staticmethod
+    def consulta_cep(cep):
+        url = f'https://viacep.com.br/ws/{cep}/json/'
+        response = requests.get(url)
+        if response.status_code == 200:
+            dados = response.json()
+            if 'erro' in dados:
+                raise ValueError('CEP inválido.')
+            return dados
+        else:
+            raise ValueError('Erro ao consultar o CEP.')
 
     @staticmethod
     def valida_nome(nome):
@@ -25,25 +33,19 @@ class Validador:
     @staticmethod
     def valida_cpf(cpf):
         if len(cpf) != 11 or not cpf.isdigit():
-            raise ValueError('CPF inválido. Deve ter 11 dígitos numéricos...')
+            raise ValueError('CPF inválido. Deve ter 11 dígitos numéricos.')
         if cpf in ['0' * 11, '1' * 11, '2' * 11, '3' * 11, '4' * 11, '5' * 11, '6' * 11, '7' * 11, '8' * 11, '9' * 11]:
-            raise ValueError('CPF inválido. Sequência repetida...')
+            raise ValueError('CPF inválido. Sequência repetida.')
         soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
         resto = soma % 11
-        if resto < 2:
-            digito1 = 0
-        else:
-            digito1 = 11 - resto
+        digito1 = 0 if resto < 2 else 11 - resto
         if int(cpf[9]) != digito1:
-            raise ValueError('CPF inválido. Dígito verificador 1 não confere...')
+            raise ValueError('CPF inválido. Dígito verificador 1 não confere.')
         soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
         resto = soma % 11
-        if resto < 2:
-            digito2 = 0
-        else:
-            digito2 = 11 - resto
+        digito2 = 0 if resto < 2 else 11 - resto
         if int(cpf[10]) != digito2:
-            raise ValueError('CPF inválido. Dígito verificador 2 não confere...')
+            raise ValueError('CPF inválido. Dígito verificador 2 não confere.')
         return cpf
 
     @staticmethod
@@ -58,6 +60,8 @@ class Validador:
         pattern = r'^\d{5}-\d{3}$'
         if not regex.match(pattern, cep):
             raise ValueError('CEP inválido. Deve seguir o formato 00000-000.')
+        # Consultar a API para validar o CEP
+        Validador.consulta_cep(cep)
         return cep
 
     @staticmethod
@@ -79,6 +83,7 @@ class Validador:
 
 class Pessoas:
     __abstract__ = True
+
     def __init__(self, nome, cpf, logradouro, numero, complemento, bairro, cep, cidade, uf, telefone, email):
         self.nome = Validador.valida_nome(nome)
         self.__cpf = Validador.valida_cpf(cpf)
@@ -97,16 +102,12 @@ class Pessoas:
             'uf': uf
         }
 
-
     @property
     def cpf(self):
         return self.__cpf
 
 class Clientes(Pessoas, db.Model):
-    def __init__(self, nome, cpf, logradouro, numero, complemento, bairro, cep, cidade, uf, telefone, email):
-        super().__init__(nome, cpf, logradouro, numero, complemento, bairro, cep, cidade, uf, telefone, email)
-
-    __tablename__ = 'clientes'  
+    __tablename__ = 'clientes'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome = db.Column(db.String, nullable=False)
@@ -121,8 +122,7 @@ class Clientes(Pessoas, db.Model):
     telefone = db.Column(db.String, nullable=False)  
     email = db.Column(db.String, nullable=False)  
 
-    def __init__(self, nome, cpf, logradouro, numero, complemento, bairro,
-                 cep, cidade, uf, telefone, email, id=None):
+    def __init__(self, nome, cpf, logradouro, numero, complemento, bairro, cep, cidade, uf, telefone, email, id=None):
         self.id = id
         self.nome = nome
         self.cpf = cpf
@@ -136,16 +136,13 @@ class Clientes(Pessoas, db.Model):
         self.telefone = telefone
         self.email = email
 
-    
     def salvar(self):
         db.session.add(self)
         db.session.commit() 
 
-    
     def atualizar(self):
         db.session.commit()  
 
-    
     def deletar(self):
         db.session.delete(self)  
         db.session.commit()  
