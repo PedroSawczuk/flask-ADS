@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- Declaração que este documento é um HTML5 -->
+
+<html lang="pt">
+  <!-- Abertura da tag html, com atributo lang definindo o idioma da página como português -->
+
+  <head>
+    <!-- Abertura da tag head, onde ficam metadados e links para estilos e scripts -->
+
+    <meta charset="utf-8" />
+    <!-- Define a codificação de caracteres para o documento, aqui é usado o conjunto de caracteres universal UTF-8 -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Define a viewport para tornar a página responsiva. 
+             O valor 'width=device-width' define a largura da viewport para a largura do dispositivo. 
+             O valor 'initial-scale=1' define o nível de zoom inicial quando a página é carregada pelo navegador. -->
+
+    <link
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+    <!-- Importa o arquivo CSS do Bootstrap, a partir da pasta estática do projeto. 
+             O método url_for gera uma URL para uma rota estática, neste caso o arquivo de estilo CSS do Bootstrap -->
+
+    <!-- Importa a biblioteca jQuery, necessária para o funcionamento de vários componentes do Bootstrap e também para a lógica de exibição das mensagens -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
+
+    {% block head %}{% endblock %}
+    <!-- Bloco reservado para que templates filhos possam adicionar
+             conteúdo dentro da tag head. 
+             É útil para adicionar estilos CSS ou scripts JavaScript específicos para cada página. -->
+  </head>
+  <!-- Fim da tag head -->
+
+  <body>
+    <!-- Abertura da tag body, onde fica o conteúdo da página -->
+
+    <div class="container">
+      <!-- Abertura de uma div com a classe 'container' do Bootstrap.
+                 Esta classe é um componente do Bootstrap que centraliza o conteúdo da página e aplica margens automáticas. -->
+
+      {% block body %}{% endblock %}
+      <!-- Bloco reservado para que templates filhos possam
+                 adicionar conteúdo dentro da tag body.
+                 Em outras palavras, é onde o conteúdo principal de cada página deve ser inserido. -->
+    </div>
+    <!-- Fim da div container -->
+  </body>
+  <!-- Fim da tag body -->
+</html>
+<!-- Fim da tag html -->

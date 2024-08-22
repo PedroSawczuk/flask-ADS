@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Editar Cliente</title>
+{% endblock %}
+
+{% block body %}
+<h3>Editar Cliente</h3>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        <script>
+            $(".alert").delay(5000).slideUp(200, function() {
+                $(this).alert('close');
+            });
+        </script>
+    {% endif %}
+{% endwith %}
+
+<form action="{{ url_for('cliente.editar_cliente', id=cliente.id) }}" method="POST">
+    <div class='mb-3'>
+        <label for='nome' class='form-label'>Nome</label>
+        <input class='form-control' type='text' name='nome' id='nome' value='{{ cliente.nome }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='cpf' class='form-label'>CPF</label>
+        <input class='form-control' type='text' name='cpf' id='cpf' value='{{ cliente.cpf }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='logradouro' class='form-label'>Logradouro</label>
+        <input class='form-control' type='text' name='logradouro' id='logradouro' value='{{ cliente.logradouro }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='numero' class='form-label'>Número</label>
+        <input class='form-control' type='text' name='numero' id='numero' value='{{ cliente.numero }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='complemento' class='form-label'>Complemento</label>
+        <input class='form-control' type='text' name='complemento' id='complemento' value='{{ cliente.complemento }}' />
+    </div>
+
+    <div class='mb-3'>
+        <label for='bairro' class='form-label'>Bairro</label>
+        <input class='form-control' type='text' name='bairro' id='bairro' value='{{ cliente.bairro }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='cep' class='form-label'>CEP</label>
+        <input class='form-control' type='text' name='cep' id='cep' value='{{ cliente.cep }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='cidade' class='form-label'>Cidade</label>
+        <input class='form-control' type='text' name='cidade' id='cidade' value='{{ cliente.cidade }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='uf' class='form-label'>UF</label>
+        <input class='form-control' type='text' name='uf' id='uf' value='{{ cliente.uf }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='telefone' class='form-label'>Telefone</label>
+        <input class='form-control' type='text' name='telefone' id='telefone' value='{{ cliente.telefone }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='email' class='form-label'>Email</label>
+        <input class='form-control' type='email' name='email' id='email' value='{{ cliente.email }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <button type='submit' class='btn btn-primary mb-3'>Atualizar</button>
+    </div>
+</form>
+{% endblock %}

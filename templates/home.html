@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1>Bem-vindo à Página Inicial</h1>
+    <p>Escolha uma das opções abaixo para navegar:</p>
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="{{ url_for('cliente.index') }}" class="btn btn-primary btn-lg">Ver Clientes</a>
+        <a href="{{ url_for('produto.index') }}" class="btn btn-secondary btn-lg">Ver Produtos</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Produtos Cadastrados</title>
+{% endblock %}
+
+{% block body %}
+<h1>Lista de Produtos</h1>
+<a href="{{ url_for('home') }}">Página Inicial</a>
+<a href="{{ url_for('produto.novo') }}">Adicionar Novo Produto</a>
+
+<h3>Produtos Cadastrados</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Descrição</th>
+      <th>Preço</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for produto in produtos %}
+    <tr>
+      <td>{{ produto.id }}</td>
+      <td>{{ produto.descricao }}</td>
+      <td>{{ produto.preco }}</td>
+      <td>{{ 'Ativo' if produto.status == 1 else 'Desativado' }}</td>
+      <td>
+        <a
+          href="{{ url_for('produto.atualiza', id=produto.id, status=1 if produto.status == 0 else 0) }}"
+          class="btn btn-warning btn-sm"
+        >
+          {{ 'Ativar' if produto.status == 0 else 'Desativar' }}
+        </a>
+        <a
+          href="{{ url_for('produto.editar', id=produto.id) }}"
+          class="btn btn-primary btn-sm"
+        >Editar</a>
+        <a
+          href="{{ url_for('produto.deleta', id=produto.id) }}"
+          class="btn btn-danger btn-sm"
+        >Deletar</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

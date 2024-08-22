@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Editar Produto</title>
+{% endblock %}
+
+{% block body %}
+<h3>Editar Produto</h3>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ messages[0] }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        $(".alert").delay(5000).slideUp(200, function() {
+            $(this).alert('close');
+        });
+    </script>
+    {% endif %}
+{% endwith %}
+
+<form action="{{ url_for('produto.editar', id=produto.id) }}" method="POST">
+    <div class='mb-3'>
+        <label for='descricao' class='form-label'>Descrição</label>
+        <input class='form-control' type='text' name='descricao' id='descricao' value='{{ produto.descricao }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <label for='preco' class='form-label'>Preço</label>
+        <input class='form-control' type='text' name='preco' id='preco' value='{{ produto.preco }}' required />
+    </div>
+
+    <div class='mb-3'>
+        <button type='submit' class='btn btn-primary mb-3'>Atualizar</button>
+    </div>
+</form>
+{% endblock %}
