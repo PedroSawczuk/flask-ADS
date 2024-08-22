@@ -4,21 +4,26 @@ from database import db
 from controller.cliente_controller import cliente_blueprint
 from controller.produto_controller import produto_blueprint
 
-def create_app():
-    app = Flask(__name__) 
+def create_app(config=None):
+    app = Flask(__name__)
 
+    # Configuração padrão
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
     DB_DIR = os.path.join(BASE_DIR, 'db')  
-
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_DIR, 'ifro2024.db')  
+    app.secret_key = 'seu segredo'
 
-    app.secret_key = 'seu segredo'  
+    # Aplicando configurações personalizadas, se fornecidas
+    if config:
+        app.config.from_object(config)
+    
     db.init_app(app)  
 
     app.register_blueprint(cliente_blueprint, url_prefix='/clientes')
     app.register_blueprint(produto_blueprint, url_prefix='/produtos')
 
     return app
+
 
 
 def create_tables():

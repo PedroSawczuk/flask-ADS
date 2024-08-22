@@ -88,7 +88,7 @@
     <tr>
       <td>{{ produto.id }}</td>
       <td>{{ produto.descricao }}</td>
-      <td>{{ produto.preco }}</td>
+      <td>R$ {{ produto.preco }}</td>
       <td>{{ 'Ativo' if produto.status == 1 else 'Desativado' }}</td>
       <td>
         <a

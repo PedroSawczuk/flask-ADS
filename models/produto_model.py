@@ -44,5 +44,5 @@ class Produto(db.Model):
 
     @staticmethod
     def get_produto(id):
-        # Retorna um produto específico pelo ID
-        return db.session.query(Produto).get(id)
+        # Atualizado para usar Session.get()
+        return db.session.get(Produto, id)
