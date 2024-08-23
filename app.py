@@ -9,7 +9,7 @@ def create_app(config=None):
 
     # Configuração padrão
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    DB_DIR = os.path.join(BASE_DIR, 'db')
+    DB_DIR = os.path.join(BASE_DIR, 'dao')
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(DB_DIR, 'ifro2024.db')
     app.secret_key = 'seu segredo'
 
