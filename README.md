@@ -7,7 +7,7 @@
     ```
 
    ```bash
-   cd flask-ADS.git
+   cd flask-ADS
     ```
 
    ```bash
