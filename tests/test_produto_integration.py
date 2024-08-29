@@ -1,6 +1,6 @@
 import pytest
-from app import create_app, db
 from models.produto_model import Produto
+from app import create_app, db
 
 @pytest.fixture(scope='module')
 def client():
@@ -59,3 +59,25 @@ def test_update_product(client):
     produto_atualizado = Produto.get_produto(produto.id)
     assert produto_atualizado.descricao == 'Produto Teste Atualizado'
     assert produto_atualizado.preco == 29.99
+
+def test_delete_product(client):
+    # Adiciona um produto para excluir
+    produto_data = {
+        'descricao': 'Produto Teste',
+        'preco': '19,99'
+    }
+    response = client.post('/produtos/', data=produto_data)
+    assert response.status_code == 302  # Redireciona após POST
+
+    # Recupera o produto adicionado
+    produto = Produto.get_produtos()
+    produto = next((p for p in produto if p.descricao == 'Produto Teste'), None)
+    assert produto is not None
+
+    # Envia uma solicitação GET para excluir o produto
+    response = client.get(f'/produtos/deleta/{produto.id}')
+    assert response.status_code == 302  # Redireciona após GET
+    
+    # Verifica se o produto foi excluído
+    produto_excluido = Produto.get_produto(produto.id)
+    assert produto_excluido is None
