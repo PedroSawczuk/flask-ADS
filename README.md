@@ -5,7 +5,8 @@
 De preferencia, no diretório que voce quer fazer o projeto!
 
    ```bash
-   git clone https://github.com/PedroSawczuk/flask-ADS.git     ```
+   git clone https://github.com/PedroSawczuk/flask-ADS.git     
+   ```
 
    ```bash
    cd flask-ADS
